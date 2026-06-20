@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ livreur.nom_complet }} | MotoTrack{% endblock %}
+{% block page_title %}Fiche du livreur{% endblock %}
+{% block content %}
+<section class="driver-record-hero">
+  <div class="driver-record-identity">
+    {% if livreur.photo %}<img src="{{ livreur.photo.url }}" alt="{{ livreur.nom_complet }}">{% else %}<span class="driver-record-avatar">{{ livreur.nom_complet|first }}</span>{% endif %}
+    <div><span class="eyebrow light">Livreur BAOL EXPRESS</span><h2>{{ livreur.nom_complet }}</h2><p>{{ livreur.user.email|default:"E-mail non renseigné" }} · {{ livreur.telephone }}</p></div>
+  </div>
+  <div class="driver-record-actions">
+    <span class="badge {% if livreur.actif %}terminee{% else %}annulee{% endif %}">{% if livreur.actif %}Actif{% else %}Inactif{% endif %}</span>
+  </div>
+</section>
+<section class="record-grid">
+  <article class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Identité</span><h2>Informations personnelles</h2></div><i data-lucide="contact"></i></div>
+    <dl class="record-list">
+      <div><dt>Nom d'utilisateur</dt><dd>{{ livreur.user.username }}</dd></div>
+      <div><dt>Age</dt><dd>{% if livreur.age %}{{ livreur.age }} ans{% else %}Non renseigne{% endif %}</dd></div>
+      <div><dt>Téléphone</dt><dd>{{ livreur.telephone }}</dd></div>
+      <div><dt>Adresse</dt><dd>{{ livreur.adresse }}</dd></div>
+      <div><dt>Numéro CNI</dt><dd>{{ livreur.numero_cni }}</dd></div>
+      <div><dt>Numéro de permis</dt><dd>{{ livreur.numero_permis }}</dd></div>
+    </dl>
+  </article>
+  <article class="section-block contract-card">
+    <div class="section-heading"><div><span class="eyebrow">Engagement</span><h2>Contrat de travail</h2></div><span class="contract-badge {{ livreur.type_contrat|lower }}">{{ livreur.type_contrat }}</span></div>
+    <dl class="record-list">
+      <div><dt>Type de contrat</dt><dd>{{ livreur.get_type_contrat_display }}</dd></div>
+      {% if livreur.type_contrat == "CDD" %}
+      <div><dt>Date de début</dt><dd>{{ livreur.date_debut_contrat|date:"d/m/Y" }}</dd></div>
+      <div><dt>Date de fin</dt><dd>{{ livreur.date_fin_contrat|date:"d/m/Y" }}</dd></div>
+      {% endif %}
+    </dl>
+    {% if livreur.contrat %}<a class="btn btn-primary contract-download" href="{{ livreur.contrat.url }}" target="_blank" rel="noopener"><i data-lucide="file-down"></i> Télécharger le contrat</a>{% else %}<p class="contract-empty"><i data-lucide="file-x-2"></i> Aucun document de contrat ajouté.</p>{% endif %}
+  </article>
+  <article class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Activité</span><h2>Situation actuelle</h2></div><i data-lucide="briefcase-business"></i></div>
+    <div class="record-stats"><div><strong>{{ missions_count }}</strong><span>Missions confiées</span></div><div><strong>{{ missions_terminees }}</strong><span>Livraisons terminées</span></div></div>
+    <dl class="record-list"><div><dt>Moto affectée</dt><dd>{% if affectation %}{{ affectation.moto.immatriculation }} · {{ affectation.moto.marque }} {{ affectation.moto.modele }}{% else %}Aucune moto active{% endif %}</dd></div></dl>
+  </article>
+  <article class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Compte</span><h2>Profil utilisateur</h2></div><i data-lucide="shield-user"></i></div>
+    <dl class="record-list">
+      <div><dt>Prénom</dt><dd>{{ livreur.user.first_name|default:"Non renseigné" }}</dd></div>
+      <div><dt>Nom</dt><dd>{{ livreur.user.last_name|default:"Non renseigné" }}</dd></div>
+      <div><dt>E-mail</dt><dd>{{ livreur.user.email|default:"Non renseigné" }}</dd></div>
+      <div><dt>Dernière connexion</dt><dd>{{ livreur.user.last_login|date:"d/m/Y à H:i"|default:"Jamais connecté" }}</dd></div>
+    </dl>
+  </article>
+</section>
+{% endblock %}

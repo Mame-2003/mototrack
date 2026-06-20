@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Alertes | MotoTrack{% endblock %}
+{% block page_title %}Centre d'alertes{% endblock %}
+{% block content %}
+<section class="alerts-summary">
+  <div><span class="alert-summary-icon"><i data-lucide="bell-ring"></i></span><div><span class="eyebrow">{% if user.is_staff %}Surveillance{% else %}Missions{% endif %}</span><h2>Alertes BAOL EXPRESS</h2><p>{% if user.is_staff %}Incidents GPS, sorties de zone et événements de livraison.{% else %}Nouvelles missions assignées et missions annulées.{% endif %}</p></div></div>
+  <span class="unread-total">{{ nav_unread_alerts }} non lue{{ nav_unread_alerts|pluralize }}</span>
+</section>
+<section class="section-block">
+  <div class="section-heading"><div><span class="eyebrow">Historique</span><h2>Toutes les alertes</h2></div><span class="count">{{ alerts|length }} alertes</span></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Moto</th><th>Mission</th><th>Type</th><th>Message</th><th>Statut</th><th class="actions-title">Action</th></tr></thead>
+      <tbody>
+      {% for alert in alerts %}
+        <tr class="{% if not alert.is_read %}alert-row-unread{% endif %}">
+          <td>{{ alert.date|date:"d/m/Y" }}<small>{{ alert.date|time:"H:i:s" }}</small></td>
+          <td>{{ alert.moto.immatriculation|default:"—" }}</td>
+          <td>{% if alert.mission %}<a href="{% url 'mission_detail' alert.mission.id %}">#{{ alert.mission.id }}</a>{% else %}—{% endif %}</td>
+          <td><span class="alert-type-badge {{ alert.type|lower }}">{{ alert.get_type_display }}</span></td>
+          <td class="alert-message">{{ alert.message }}</td>
+          <td><span class="badge {% if alert.is_read %}disponible{% else %}annulee{% endif %}">{% if alert.is_read %}Lue{% else %}Non lue{% endif %}</span></td>
+          <td class="actions">
+            {% if not alert.is_read %}<form method="post" action="{% url 'alert_mark_read' alert.id %}">{% csrf_token %}<button class="icon-btn" title="Marquer comme lue"><i data-lucide="check"></i></button></form>{% else %}<i data-lucide="check-check" class="read-check"></i>{% endif %}
+            <form method="post" action="{% url 'alert_delete' alert.id %}" onsubmit="return confirm('Supprimer cette alerte ?')">{% csrf_token %}<button class="icon-btn danger" title="Supprimer l'alerte"><i data-lucide="trash-2"></i></button></form>
+          </td>
+        </tr>
+      {% empty %}<tr><td colspan="7" class="empty">Aucune alerte enregistrée.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

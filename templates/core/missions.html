@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load static %}{% block title %}Missions | MotoTrack{% endblock %}{% block page_title %}Missions de livraison{% endblock %}
+{% block content %}
+{% if show_form %}
+<section class="form-only-layout form-only-wide">
+  {% include "core/partials/form_panel.html" with heading="Mission" %}
+</section>
+{% else %}
+<section>
+  <div class="section-block">
+    <div class="section-heading">
+      <div><span class="eyebrow">Livraisons</span><h2>Toutes les missions</h2></div>
+      <a class="btn btn-primary" href="?ajouter=1"><i data-lucide="plus"></i> Ajouter</a>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Client</th><th>Affectation</th><th>Destination</th><th>Statut</th><th class="actions-title">Action</th></tr></thead><tbody>
+    {% for mission in missions %}<tr><td><strong>#{{ mission.id }} · {{ mission.nom_client }}</strong><small>{{ mission.telephone_client }}</small></td><td>{{ mission.livreur.nom_complet }}<small>{{ mission.moto.immatriculation }}</small></td><td>{{ mission.adresse_livraison|truncatechars:32 }}</td><td><span class="badge {{ mission.statut }}">{{ mission.get_statut_display }}</span></td><td class="actions"><a class="icon-btn" href="{% url 'mission_detail' mission.id %}" title="Consulter"><i data-lucide="eye"></i></a><a class="icon-btn" href="?modifier={{ mission.id }}" title="Modifier"><i data-lucide="pencil"></i></a><form method="post" onsubmit="return confirm('Supprimer cette mission ?');">{% csrf_token %}<button class="icon-btn danger" name="delete" value="{{ mission.id }}" title="Supprimer"><i data-lucide="trash-2"></i></button></form></td></tr>
+    {% empty %}<tr><td colspan="5" class="empty">Aucune mission.</td></tr>{% endfor %}</tbody></table></div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+{% block scripts %}{% if show_form %}<script src="{% static 'js/mission_destination_picker.js' %}?v=20260615-2"></script>{% endif %}{% endblock %}

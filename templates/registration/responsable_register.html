@@ -1,0 +1,37 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Creer un compte responsable | MotoTrack</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+</head>
+<body class="login-body">
+  <section class="login-visual">
+    <div class="visual-grid"></div>
+    <div class="login-brand"><span class="brand-mark"><i data-lucide="navigation"></i></span> MotoTrack · Baol Express</div>
+    <div class="login-copy">
+      <span class="eyebrow light">Compte responsable</span>
+      <h1>Pilotez votre flotte.<br>En toute simplicite.</h1>
+      <p>Creez votre compte responsable pour gerer les motos, les livreurs, les missions et le suivi GPS.</p>
+    </div>
+  </section>
+  <main class="login-panel">
+    <form method="post" class="login-form registration-form">
+      {% csrf_token %}
+      <span class="mobile-brand"><span class="brand-mark"><i data-lucide="navigation"></i></span> MotoTrack · Baol Express</span>
+      <div><span class="eyebrow">Nouvel acces</span><h2>Creer un compte</h2><p>Renseignez les informations du responsable.</p></div>
+      {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors|join:", " }}</div>{% endif %}
+      {% for field in form %}
+        <label>{{ field.label }}{{ field }}{% if field.help_text %}<small class="help-text">{{ field.help_text|safe }}</small>{% endif %}{% if field.errors %}<small class="field-error">{{ field.errors|join:", " }}</small>{% endif %}</label>
+      {% endfor %}
+      <button class="btn btn-primary btn-wide" type="submit">Creer le compte <i data-lucide="user-plus"></i></button>
+      <a class="auth-switch-link" href="{% url 'login' %}"><i data-lucide="arrow-left"></i> Retour a la connexion</a>
+    </form>
+  </main>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

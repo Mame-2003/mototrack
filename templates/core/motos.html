@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Motos | MotoTrack{% endblock %}{% block page_title %}Gestion des motos{% endblock %}
+{% block content %}
+{% if show_form %}
+<section class="form-only-layout">
+  {% include "core/partials/form_panel.html" with heading="Moto" %}
+</section>
+{% else %}
+<section>
+  <div class="section-block">
+    <div class="section-heading">
+      <div><span class="eyebrow">Flotte</span><h2>Liste des motos</h2></div>
+      <div class="heading-actions"><span class="count">{{ motos|length }} motos</span><a class="btn btn-primary" href="?ajouter=1"><i data-lucide="plus"></i> Ajouter</a></div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Immatriculation</th><th>Véhicule</th><th>État</th><th class="actions-title">Action</th></tr></thead><tbody>
+    {% for moto in motos %}<tr><td><strong>{{ moto.immatriculation }}</strong></td><td>{{ moto.marque }} {{ moto.modele }}</td><td><span class="badge {{ moto.etat }}">{{ moto.get_etat_display }}</span></td><td class="actions"><a class="icon-btn" href="?modifier={{ moto.id }}" title="Modifier"><i data-lucide="pencil"></i></a><form method="post">{% csrf_token %}<button class="icon-btn danger" name="delete" value="{{ moto.id }}" title="Supprimer"><i data-lucide="trash-2"></i></button></form></td></tr>
+    {% empty %}<tr><td colspan="4" class="empty">Aucune moto.</td></tr>{% endfor %}</tbody></table></div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

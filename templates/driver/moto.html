@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Ma Moto | MotoTrack{% endblock %}{% block page_title %}Ma Moto{% endblock %}
+{% block content %}
+{% if moto %}
+<section class="driver-bike-hero"><span class="bike-hero-icon"><i data-lucide="bike"></i></span><div><span class="eyebrow light">Moto actuellement affectee</span><h2>{{ moto.immatriculation }}</h2><p>{{ moto.marque }} · {{ moto.modele }}</p></div><span class="badge {{ moto.etat }}">{{ moto.get_etat_display }}</span></section>
+<section class="bike-info-grid">
+  <article class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Vehicule</span><h2>Informations</h2></div></div>
+    <div class="info-rows">
+      <div><span>Immatriculation</span><strong>{{ moto.immatriculation }}</strong></div>
+      <div><span>Marque</span><strong>{{ moto.marque }}</strong></div>
+      <div><span>Modele</span><strong>{{ moto.modele }}</strong></div>
+      <div><span>Etat</span><strong>{{ moto.get_etat_display }}</strong></div>
+      {% if affectation %}
+        <div><span>Debut affectation</span><strong>{{ affectation.date_debut|date:"d/m/Y H:i" }}</strong></div>
+        <div><span>Fin affectation</span><strong>{% if affectation.date_fin %}{{ affectation.date_fin|date:"d/m/Y H:i" }}{% else %}En cours{% endif %}</strong></div>
+      {% endif %}
+    </div>
+  </article>
+  <article class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Communication</span><h2>Dernier signal GPS</h2></div></div>
+    {% if latest_position %}
+      <div class="gps-reading"><i data-lucide="map-pin"></i><strong>{{ latest_position.latitude }}, {{ latest_position.longitude }}</strong><span>{{ latest_position.recue_le|date:"d/m/Y H:i:s" }}</span></div>
+    {% else %}
+      <div class="empty-state"><i data-lucide="satellite"></i><p>Aucune position enregistree.</p></div>
+    {% endif %}
+  </article>
+</section>
+{% else %}<div class="empty-state wide"><i data-lucide="bike"></i><h3>Aucune moto affectee</h3><p>Contactez le responsable BAOL EXPRESS.</p></div>{% endif %}
+{% endblock %}

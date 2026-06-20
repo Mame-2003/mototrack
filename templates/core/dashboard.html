@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord | MotoTrack{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+{% block content %}
+<section class="welcome-band">
+  <div class="welcome-content">
+    <span class="welcome-kicker"><i data-lucide="map-pinned"></i> Livraison intelligente au Sénégal</span>
+    <h2><span>Bienvenue chez</span> <strong class="baol-name">Baol Express</strong></h2>
+    <p>Une vision claire de chaque mission, chaque livreur et chaque moto.</p>
+    <div class="welcome-details">
+      <span><i data-lucide="shield-check"></i> Suivi sécurisé</span>
+      <span><i data-lucide="radio-tower"></i> Flotte connectée</span>
+    </div>
+  </div>
+  <div class="welcome-signature">
+    <span class="welcome-logo"><i data-lucide="bike"></i></span>
+    <div><small>Votre partenaire livraison</small><strong>Baol Express</strong><span>Dakar · Sénégal</span></div>
+  </div>
+</section>
+<section class="stats-grid stats-grid-extended">
+  <article class="stat-card"><span class="stat-icon blue"><i data-lucide="bike"></i></span><div><small>Motos</small><strong>{{ total_motos }}</strong><span>dans la flotte</span></div></article>
+  <article class="stat-card"><span class="stat-icon cyan"><i data-lucide="user-check"></i></span><div><small>Livreurs actifs</small><strong>{{ total_livreurs }}</strong><span>comptes actifs</span></div></article>
+  <article class="stat-card"><span class="stat-icon red"><i data-lucide="user-x"></i></span><div><small>Livreurs inactifs</small><strong>{{ livreurs_inactifs }}</strong><span>comptes inactifs</span></div></article>
+  <article class="stat-card"><span class="stat-icon amber"><i data-lucide="route"></i></span><div><small>Missions en cours</small><strong>{{ missions_en_cours }}</strong><span>missions actives</span></div></article>
+  <article class="stat-card"><span class="stat-icon violet"><i data-lucide="clock-3"></i></span><div><small>Missions en attente</small><strong>{{ missions_en_attente }}</strong><span>à démarrer</span></div></article>
+  <article class="stat-card"><span class="stat-icon green"><i data-lucide="circle-check"></i></span><div><small>Missions terminées</small><strong>{{ missions_terminees }}</strong><span>livraisons validées</span></div></article>
+  <article class="stat-card"><span class="stat-icon red"><i data-lucide="circle-x"></i></span><div><small>Missions annulées</small><strong>{{ missions_annulees }}</strong><span>livraisons annulées</span></div></article>
+</section>
+<section class="dashboard-grid">
+  <div class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Activité</span><h2>Missions récentes</h2></div><a href="{% url 'missions' %}">Tout afficher <i data-lucide="arrow-up-right"></i></a></div>
+    <div class="table-wrap"><table><thead><tr><th>Mission</th><th>Livreur</th><th>Moto</th><th>Statut</th></tr></thead><tbody>
+    {% for mission in recent_missions %}<tr><td><strong>#{{ mission.id }} · {{ mission.nom_client }}</strong><small>{{ mission.adresse_livraison|truncatechars:35 }}</small></td><td>{{ mission.livreur.nom_complet }}</td><td>{{ mission.moto.immatriculation }}</td><td><span class="badge {{ mission.statut }}">{{ mission.get_statut_display }}</span></td></tr>
+    {% empty %}<tr><td colspan="4" class="empty">Aucune mission enregistrée.</td></tr>{% endfor %}
+    </tbody></table></div>
+  </div>
+  <aside class="section-block positions-panel">
+    <div class="section-heading"><div><span class="eyebrow">IoT</span><h2>Derniers signaux</h2></div><a href="{% url 'map' %}" class="icon-btn"><i data-lucide="map"></i></a></div>
+    <div class="position-list">{% for position in latest_positions %}
+      <div class="position-item"><span class="pulse-pin"><i></i></span><div><strong>{{ position.moto.immatriculation }}</strong><small>{{ position.latitude }}, {{ position.longitude }}</small></div><time>{{ position.recue_le|timesince }}</time></div>
+    {% empty %}<div class="empty-state"><i data-lucide="satellite"></i><p>En attente du premier signal GPS.</p></div>{% endfor %}</div>
+  </aside>
+</section>
+{% endblock %}

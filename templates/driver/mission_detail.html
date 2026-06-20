@@ -1,0 +1,28 @@
+{% extends "base.html" %}{% load static l10n %}
+{% block title %}Mission #{{ mission.id }} | MotoTrack{% endblock %}{% block page_title %}Détail mission #{{ mission.id }}{% endblock %}
+{% block content %}
+<section class="driver-detail-grid">
+  <div class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Client</span><h2>{{ mission.nom_client }}</h2></div><span class="badge {{ mission.statut }}">{{ mission.get_statut_display }}</span></div>
+    <div class="detail-list driver-detail-list">
+      <div><i data-lucide="phone"></i><span><small>Téléphone</small><strong>{{ mission.telephone_client }}</strong></span></div>
+      <div><i data-lucide="map-pin"></i><span><small>Adresse</small><strong>{{ mission.adresse_livraison }}</strong></span></div>
+      <div><i data-lucide="message-square-text"></i><span><small>Description</small><strong>{{ mission.description_lieu|default:"Aucune indication" }}</strong></span></div>
+      <div><i data-lucide="calendar-clock"></i><span><small>Créée le</small><strong>{{ mission.cree_le|date:"d/m/Y à H:i" }}</strong></span></div>
+      <div><i data-lucide="bike"></i><span><small>Moto</small><strong>{{ mission.moto.immatriculation }}</strong></span></div>
+      <div><i data-lucide="user"></i><span><small>Livreur</small><strong>{{ mission.livreur.nom_complet }}</strong></span></div>
+      <div><i data-lucide="locate-fixed"></i><span><small>Latitude destination</small><strong>{{ mission.destination_latitude|default:"—" }}</strong></span></div>
+      <div><i data-lucide="locate-fixed"></i><span><small>Longitude destination</small><strong>{{ mission.destination_longitude|default:"—" }}</strong></span></div>
+    </div>
+    <div class="driver-detail-actions"><a class="btn btn-secondary" href="tel:{{ mission.telephone_client }}"><i data-lucide="phone-call"></i> Appeler le client</a>{% if mission.destination_latitude and mission.destination_longitude %}{% if latest_position %}<a class="btn btn-maps" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin={{ latest_position.latitude|unlocalize }},{{ latest_position.longitude|unlocalize }}&destination={{ mission.destination_latitude|unlocalize }},{{ mission.destination_longitude|unlocalize }}&travelmode=driving&dir_action=navigate"><i data-lucide="navigation"></i> Ouvrir dans Google Maps</a>{% else %}<a class="btn btn-maps" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query={{ mission.destination_latitude|unlocalize }},{{ mission.destination_longitude|unlocalize }}"><i data-lucide="navigation"></i> Ouvrir dans Google Maps</a>{% endif %}{% endif %}</div>
+  </div>
+  <aside class="otp-panel">
+    <span class="otp-icon"><i data-lucide="shield-check"></i></span><span class="eyebrow">Preuve sécurisée</span><h2>Valider la livraison</h2>
+    {% if mission.statut == "terminee" %}<div class="success-proof"><i data-lucide="badge-check"></i><strong>Livraison validée avec succès</strong><span>{{ mission.valide_le|date:"d/m/Y à H:i" }}</span><a class="btn btn-secondary" href="{% url 'driver_proof' mission.id %}">Voir la preuve</a></div>
+    {% elif mission.statut == "annulee" %}<p>Cette mission a été annulée.</p>
+    {% else %}<p>Saisissez le code OTP fourni par le client.</p><form method="post" class="otp-form">{% csrf_token %}{{ form.otp }}{% if form.otp.errors %}<small class="field-error">{{ form.otp.errors|join:", " }}</small>{% endif %}<button class="btn btn-primary btn-wide" type="submit">Valider la livraison <i data-lucide="check"></i></button></form>{% endif %}
+  </aside>
+</section>
+<section class="section-block mission-map-section"><div class="section-heading"><div><span class="eyebrow">Navigation</span><h2>Destination et position actuelle</h2></div><span class="map-refresh-status" data-gps-map-status><i class="dot {% if latest_position %}online{% else %}stale{% endif %}"></i> {% if latest_position %}Dernière position reçue {{ latest_position.recue_le|timesince }}{% else %}Aucune position GPS reçue pour {{ mission.moto.immatriculation }}{% endif %}</span></div><div id="missionDestinationMap" data-moto-id="{{ mission.moto_id }}" data-moto-registration="{{ mission.moto.immatriculation }}" data-initial-lat="{{ latest_position.latitude|default:''|unlocalize }}" data-initial-lng="{{ latest_position.longitude|default:''|unlocalize }}" data-initial-received="{{ latest_position.recue_le|date:'c'|default:'' }}" data-destination-lat="{{ mission.destination_latitude|default:''|unlocalize }}" data-destination-lng="{{ mission.destination_longitude|default:''|unlocalize }}" data-client="{{ mission.nom_client|escape }}" data-address="{{ mission.adresse_livraison|escape }}"></div>{% if not mission.destination_latitude or not mission.destination_longitude %}<div class="map-missing-notice"><i data-lucide="map-pin-off"></i><span><strong>Destination non positionnée.</strong> Le responsable doit renseigner les coordonnées.</span></div>{% endif %}</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/mission_detail_map.js' %}?v=20260617-1"></script>{% endblock %}

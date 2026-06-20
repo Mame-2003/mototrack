@@ -1,0 +1,45 @@
+{% extends "base.html" %}{% load static l10n %}
+{% block title %}Mission #{{ mission.id }} | MotoTrack{% endblock %}
+{% block page_title %}Mission #{{ mission.id }}{% endblock %}
+{% block content %}
+<section class="detail-grid">
+  <div class="section-block mission-info">
+    <div class="section-heading"><div><span class="eyebrow">Destination</span><h2>{{ mission.nom_client }}</h2></div><span class="badge {{ mission.statut }}">{{ mission.get_statut_display }}</span></div>
+    <div class="detail-list">
+      <div><i data-lucide="phone"></i><span><small>Téléphone client</small><strong>{{ mission.telephone_client }}</strong></span></div>
+      <div><i data-lucide="map-pin"></i><span><small>Adresse</small><strong>{{ mission.adresse_livraison }}</strong></span></div>
+      <div><i data-lucide="message-square-text"></i><span><small>Indications</small><strong>{{ mission.description_lieu|default:"Aucune indication" }}</strong></span></div>
+      <div><i data-lucide="bike"></i><span><small>Moto</small><strong>{{ mission.moto.immatriculation }}</strong></span></div>
+    </div>
+    <a class="btn btn-secondary" href="tel:{{ mission.telephone_client }}"><i data-lucide="phone-call"></i> Appeler le client</a>
+  </div>
+  <aside class="otp-panel">
+    <span class="otp-icon"><i data-lucide="shield-check"></i></span><span class="eyebrow">Preuve sécurisée</span><h2>Valider la livraison</h2>
+    {% if user.is_staff and mission.statut != "terminee" and mission.statut != "annulee" %}<div class="manager-otp"><small>OTP à transmettre au client</small><strong>{{ mission.otp }}</strong><span>Expire le {{ mission.otp_expire_le|date:"d/m/Y à H:i" }}</span></div>{% endif %}
+    {% if mission.statut == "terminee" %}<div class="success-proof"><i data-lucide="badge-check"></i><strong>Livraison validée</strong><span>{{ mission.valide_le|date:"d/m/Y à H:i" }}</span></div>
+    {% elif mission.statut == "annulee" %}<p>Cette mission a été annulée.</p>
+    {% elif user.is_staff %}<p>Le livreur validera la livraison depuis son espace.</p>
+    {% else %}<p>Saisissez le code à 6 chiffres fourni par le client.</p><form method="post" class="otp-form">{% csrf_token %}{{ form.otp }}{% if form.otp.errors %}<small class="field-error">{{ form.otp.errors|join:", " }}</small>{% endif %}<button class="btn btn-primary btn-wide" type="submit">Confirmer l’OTP <i data-lucide="check"></i></button></form>{% endif %}
+  </aside>
+</section>
+<section class="section-block mission-map-section">
+  <div class="section-heading">
+    <div><span class="eyebrow">Itinéraire</span><h2>Carte de destination</h2></div>
+    <span class="map-refresh-status" data-gps-map-status><i class="dot {% if latest_position %}online{% else %}stale{% endif %}"></i> {% if latest_position %}Dernière position reçue {{ latest_position.recue_le|timesince }}{% else %}Aucune position GPS reçue pour {{ mission.moto.immatriculation }}{% endif %}</span>
+  </div>
+  <div id="missionDestinationMap"
+    data-moto-id="{{ mission.moto_id }}"
+    data-moto-registration="{{ mission.moto.immatriculation }}"
+    data-initial-lat="{{ latest_position.latitude|default:''|unlocalize }}"
+    data-initial-lng="{{ latest_position.longitude|default:''|unlocalize }}"
+    data-initial-received="{{ latest_position.recue_le|date:'c'|default:'' }}"
+    data-destination-lat="{{ mission.destination_latitude|default:''|unlocalize }}"
+    data-destination-lng="{{ mission.destination_longitude|default:''|unlocalize }}"
+    data-client="{{ mission.nom_client|escape }}"
+    data-address="{{ mission.adresse_livraison|escape }}"></div>
+  {% if not mission.destination_latitude or not mission.destination_longitude %}
+    <div class="map-missing-notice"><i data-lucide="map-pin-off"></i><span><strong>Destination non positionnée.</strong> Modifiez la mission pour choisir sa destination.</span></div>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/mission_detail_map.js' %}?v=20260617-1"></script>{% endblock %}

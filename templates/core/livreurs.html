@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Livreurs | MotoTrack{% endblock %}
+{% block page_title %}Gestion des livreurs{% endblock %}
+{% block content %}
+{% if show_form %}
+<section class="form-only-layout">
+  {% include "core/partials/form_panel.html" with heading="Livreur" %}
+</section>
+{% else %}
+<section>
+  <div class="section-block">
+    <div class="section-heading">
+      <div><span class="eyebrow">Equipe</span><h2>Liste des livreurs</h2></div>
+      <div class="heading-actions"><span class="count">{{ livreurs|length }} livreurs</span><a class="btn btn-primary" href="?ajouter=1"><i data-lucide="plus"></i> Ajouter</a></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Livreur</th><th>Age</th><th>Contact</th><th>Permis</th><th>Contrat</th><th>Etat</th><th class="actions-title">Action</th></tr></thead>
+        <tbody>
+        {% for livreur in livreurs %}
+          <tr>
+            <td><div class="person">{% if livreur.photo %}<img src="{{ livreur.photo.url }}" alt="">{% else %}<span class="avatar">{{ livreur.nom_complet|first }}</span>{% endif %}<strong>{{ livreur.nom_complet }}</strong></div></td>
+            <td>{% if livreur.age %}{{ livreur.age }} ans{% else %}<span class="muted-text">Non renseigne</span>{% endif %}</td>
+            <td>{{ livreur.telephone }}<small>{{ livreur.user.email }}</small></td>
+            <td>{{ livreur.numero_permis }}</td>
+            <td><span class="contract-badge {{ livreur.type_contrat|lower }}">{{ livreur.type_contrat }}</span>{% if livreur.type_contrat == "CDD" %}<small>jusqu'au {{ livreur.date_fin_contrat|date:"d/m/Y" }}</small>{% endif %}</td>
+            <td><span class="badge {% if livreur.actif %}terminee{% else %}annulee{% endif %}">{% if livreur.actif %}Actif{% else %}Inactif{% endif %}</span></td>
+            <td class="actions">
+              <a class="icon-btn view-action" href="{% url 'livreur_detail' livreur.id %}" title="Voir la fiche complete"><i data-lucide="eye"></i></a>
+              <a class="icon-btn" href="?modifier={{ livreur.id }}" title="Modifier"><i data-lucide="pencil"></i></a>
+              <form method="post">{% csrf_token %}<button class="icon-btn danger" name="delete" value="{{ livreur.id }}" title="Supprimer"><i data-lucide="trash-2"></i></button></form>
+            </td>
+          </tr>
+        {% empty %}<tr><td colspan="7" class="empty">Aucun livreur.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

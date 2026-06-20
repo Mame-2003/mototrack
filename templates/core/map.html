@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}Suivi GPS | MotoTrack{% endblock %}
+{% block page_title %}Suivi GPS en direct{% endblock %}
+{% block content %}
+<section class="map-toolbar">
+  <div><span class="eyebrow">Carte détaillée du Sénégal</span><h2>Position de la flotte</h2><p>Routes, villes et localités avec mise à jour automatique toutes les 15 secondes.</p></div>
+  <div class="map-history-controls">
+    <label>Historique moto<select id="historyMoto" class="form-control"><option value="">Toutes les motos</option>{% for moto in motos %}<option value="{{ moto.id }}">{{ moto.immatriculation }}</option>{% endfor %}</select></label>
+    <label class="history-toggle"><input type="checkbox" id="showHistoryLine"> Afficher le trajet historique</label>
+  </div>
+</section>
+<section class="map-stage"><div id="fleetMap"></div><div class="map-legend"><span><i class="dot online"></i>Signal récent</span><span><i class="dot stale"></i>Signal ancien</span><strong id="positionCount">0 moto</strong></div></section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/map.js' %}?v=20260617-3"></script>{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Profil | MotoTrack{% endblock %}
+{% block page_title %}Mon profil{% endblock %}
+{% block content %}
+<section class="profile-header">
+  <span class="profile-avatar">{{ user.first_name|first|default:user.username|first|upper }}</span>
+  <div><span class="eyebrow">Compte utilisateur</span><h2>{{ user.get_full_name|default:user.username }}</h2><p>{{ user.email|default:"Aucune adresse e-mail" }}</p></div>
+</section>
+<section class="profile-grid">
+  <article class="section-block profile-panel">
+    <div class="section-heading"><div><span class="eyebrow">Informations</span><h2>Coordonnées personnelles</h2></div></div>
+    <form method="post" class="data-form profile-form">
+      {% csrf_token %}
+      {% for field in profile_form %}<label>{{ field.label }}{{ field }}{% if field.errors %}<small class="field-error">{{ field.errors|join:", " }}</small>{% endif %}</label>{% endfor %}
+      <button class="btn btn-primary" type="submit" name="save_profile"><i data-lucide="save"></i> Enregistrer le profil</button>
+    </form>
+  </article>
+  <article class="section-block profile-panel">
+    <div class="section-heading"><div><span class="eyebrow">Sécurité</span><h2>Modifier le mot de passe</h2></div></div>
+    <form method="post" class="data-form password-form">
+      {% csrf_token %}
+      {% for field in password_form %}<label>{{ field.label }}{{ field }}{% if field.help_text %}<small class="help-text">{{ field.help_text|safe }}</small>{% endif %}{% if field.errors %}<small class="field-error">{{ field.errors|join:", " }}</small>{% endif %}</label>{% endfor %}
+      <button class="btn btn-primary" type="submit" name="change_password"><i data-lucide="key-round"></i> Modifier le mot de passe</button>
+    </form>
+  </article>
+</section>
+<section class="logout-band">
+  <div><strong>Terminer la session</strong><span>Déconnectez-vous lorsque vous avez terminé votre travail.</span></div>
+  <form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="btn btn-danger" type="submit"><i data-lucide="log-out"></i> Se déconnecter</button></form>
+</section>
+{% endblock %}

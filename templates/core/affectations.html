@@ -1,0 +1,51 @@
+{% extends "base.html" %}{% block title %}Affectations | MotoTrack{% endblock %}{% block page_title %}Affectations{% endblock %}
+{% block content %}
+{% if show_form %}
+<section class="form-only-layout">
+  {% include "core/partials/form_panel.html" with heading="Affectation" %}
+</section>
+{% else %}
+<section>
+  <div class="section-block">
+    <div class="section-heading">
+      <div><span class="eyebrow">Organisation</span><h2>Motos affectees</h2></div>
+      <a class="btn btn-primary" href="?ajouter=1"><i data-lucide="plus"></i> Ajouter</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Livreur</th>
+            <th>Moto</th>
+            <th>Debut</th>
+            <th>Fin</th>
+            <th>Etat</th>
+            <th class="actions-title">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in affectations %}
+            <tr>
+              <td><strong>{{ item.livreur.nom_complet }}</strong></td>
+              <td>{{ item.moto.immatriculation }}</td>
+              <td>{{ item.date_debut|date:"d/m/Y H:i" }}</td>
+              <td>{% if item.date_fin %}{{ item.date_fin|date:"d/m/Y H:i" }}{% else %}<span class="muted-text">En cours</span>{% endif %}</td>
+              <td><span class="badge {% if item.active %}en_cours{% else %}annulee{% endif %}">{% if item.active %}Active{% else %}Inactive{% endif %}</span></td>
+              <td class="actions">
+                <a class="icon-btn" href="?modifier={{ item.id }}" title="Modifier"><i data-lucide="pencil"></i></a>
+                <form method="post" onsubmit="return confirm('Supprimer cette affectation ?');">
+                  {% csrf_token %}
+                  <button class="icon-btn danger" name="delete" value="{{ item.id }}" title="Supprimer"><i data-lucide="trash-2"></i></button>
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6" class="empty">Aucune affectation.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

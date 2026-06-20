@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: mototrack
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn mototrack.wsgi:application
+    healthCheckPath: /connexion/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_SSL
+        value: "True"
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: GPS_API_KEY
+        sync: false
+      - key: GPS_DISCONNECT_MINUTES
+        value: "10"
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+      - key: TIME_ZONE
+        value: Africa/Dakar

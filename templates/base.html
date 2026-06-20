@@ -1,0 +1,87 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}MotoTrack{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  {% block head %}{% endblock %}
+</head>
+<body data-google-maps-key="{{ google_maps_api_key }}">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="{% url 'dashboard' %}">
+        <span class="brand-mark"><i data-lucide="navigation"></i></span>
+        <span>MotoTrack<small>Baol Express</small></span>
+      </a>
+      <nav class="nav-list">
+        {% if user.is_staff %}
+          <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i data-lucide="layout-dashboard"></i>Tableau de bord</a>
+          <a href="{% url 'motos' %}" class="{% if request.resolver_match.url_name == 'motos' %}active{% endif %}"><i data-lucide="bike"></i>Motos</a>
+          <a href="{% url 'livreurs' %}" class="{% if request.resolver_match.url_name == 'livreurs' %}active{% endif %}"><i data-lucide="users"></i>Livreurs</a>
+          <a href="{% url 'affectations' %}" class="{% if request.resolver_match.url_name == 'affectations' %}active{% endif %}"><i data-lucide="link-2"></i>Affectations</a>
+          <a href="{% url 'missions' %}" class="{% if request.resolver_match.url_name == 'missions' %}active{% endif %}"><i data-lucide="package-check"></i>Missions</a>
+          <a href="{% url 'alerts' %}" data-alerts-nav class="{% if request.resolver_match.url_name == 'alerts' %}active{% endif %}"><i data-lucide="bell-ring"></i>Alertes{% if nav_unread_alerts %}<span class="nav-alert-count">{{ nav_unread_alerts }}</span>{% endif %}</a>
+          <a href="{% url 'map' %}" class="{% if request.resolver_match.url_name == 'map' %}active{% endif %}"><i data-lucide="map"></i>Suivi GPS</a>
+          <a href="{% url 'proofs' %}" class="{% if request.resolver_match.url_name == 'proofs' %}active{% endif %}"><i data-lucide="badge-check"></i>Preuves</a>
+        {% else %}
+          <a href="{% url 'driver_space' %}" class="{% if request.resolver_match.url_name == 'driver_space' %}active{% endif %}"><i data-lucide="layout-dashboard"></i>Tableau de bord</a>
+          <a href="{% url 'driver_missions' %}" class="{% if request.resolver_match.url_name == 'driver_missions' or request.resolver_match.url_name == 'driver_mission_detail' %}active{% endif %}"><i data-lucide="route"></i>Mes missions</a>
+          <a href="{% url 'driver_moto' %}" class="{% if request.resolver_match.url_name == 'driver_moto' %}active{% endif %}"><i data-lucide="bike"></i>Ma moto</a>
+          <a href="{% url 'driver_deliveries' %}" class="{% if request.resolver_match.url_name == 'driver_deliveries' or request.resolver_match.url_name == 'driver_proof' %}active{% endif %}"><i data-lucide="package-check"></i>Mes livraisons</a>
+          <a href="{% url 'alerts' %}" data-alerts-nav class="{% if request.resolver_match.url_name == 'alerts' %}active{% endif %}"><i data-lucide="bell-ring"></i>Alertes{% if nav_unread_alerts %}<span class="nav-alert-count">{{ nav_unread_alerts }}</span>{% endif %}</a>
+        {% endif %}
+        {% if user.is_staff %}
+          <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}"><i data-lucide="user-cog"></i>Profil</a>
+        {% else %}
+          <a href="{% url 'driver_profile' %}" class="{% if request.resolver_match.url_name == 'driver_profile' %}active{% endif %}"><i data-lucide="user-cog"></i>Mon profil</a>
+        {% endif %}
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <span class="avatar">{{ user.first_name|first|default:user.username|first|upper }}</span>
+          <span><strong>{{ user.get_full_name|default:user.username }}</strong><small>{% if user.is_staff %}Responsable{% else %}Livreur{% endif %}</small></span>
+        </div>
+        <form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="icon-btn" title="Déconnexion"><i data-lucide="log-out"></i></button></form>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar">
+        <button class="icon-btn menu-toggle" id="menuToggle" title="Navigation"><i data-lucide="menu"></i></button>
+        <div><span class="eyebrow">MotoTrack</span><h1>{% block page_title %}Vue d’ensemble{% endblock %}</h1></div>
+        <div class="topbar-actions">
+          <details class="alerts-menu">
+            <summary class="alert-bell" data-alert-bell title="Alertes">
+              <i data-lucide="bell"></i>
+              {% if nav_unread_alerts %}<span class="alert-live-count">{{ nav_unread_alerts }}</span>{% endif %}
+            </summary>
+            <div class="alerts-dropdown">
+              <div class="alerts-dropdown-head"><strong>Alertes récentes</strong><span>{{ nav_unread_alerts }} non lue{{ nav_unread_alerts|pluralize }}</span></div>
+              <div class="alerts-preview">
+                {% for alert in nav_alerts %}
+                  <a href="{% url 'alerts' %}" class="{% if not alert.is_read %}unread{% endif %}">
+                    <span class="alert-type-icon {{ alert.type|lower }}"><i data-lucide="{% if alert.type == 'GPS_DECONNECTE' %}wifi-off{% elif alert.type == 'SORTIE_ZONE' %}map-pin-off{% elif alert.type == 'MISSION_ASSIGNEE' %}package-plus{% elif alert.type == 'MISSION_ANNULEE' %}package-x{% else %}badge-check{% endif %}"></i></span>
+                    <span><strong>{{ alert.get_type_display }}</strong><small>{{ alert.message|truncatechars:70 }}</small><time>{{ alert.date|timesince }}</time></span>
+                  </a>
+                {% empty %}<p class="alerts-empty">Aucune alerte.</p>{% endfor %}
+              </div>
+              <a class="alerts-all" href="{% url 'alerts' %}">Voir toutes les alertes <i data-lucide="arrow-right"></i></a>
+            </div>
+          </details>
+        </div>
+      </header>
+      {% if messages %}<div class="messages">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script src="{% static 'js/google_maps.js' %}?v=20260616-13"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

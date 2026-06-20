@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Mon profil | MotoTrack{% endblock %}{% block page_title %}Mon profil{% endblock %}
+{% block content %}
+<section class="driver-profile-view">
+  <header class="driver-profile-banner">
+    {% if livreur.photo %}<img src="{{ livreur.photo.url }}" alt="{{ livreur.nom_complet }}">{% else %}<span class="driver-profile-avatar">{{ livreur.nom_complet|first }}</span>{% endif %}
+    <div><span class="eyebrow light">Identité professionnelle</span><h2>{{ livreur.nom_complet }}</h2><p>Livreur BAOL EXPRESS · Compte vérifié</p></div>
+    <span class="profile-locked"><i data-lucide="lock-keyhole"></i> Profil géré par le responsable</span>
+  </header>
+  <section class="section-block profile-readonly">
+    <div class="section-heading"><div><span class="eyebrow">Informations personnelles</span><h2>Fiche du livreur</h2></div></div>
+    <div class="readonly-grid">
+      <div><span class="readonly-icon"><i data-lucide="user"></i></span><span><small>Prénom</small><strong>{{ livreur.user.first_name|default:"—" }}</strong></span></div>
+      <div><span class="readonly-icon"><i data-lucide="user"></i></span><span><small>Nom</small><strong>{{ livreur.user.last_name|default:"—" }}</strong></span></div>
+      <div><span class="readonly-icon"><i data-lucide="phone"></i></span><span><small>Téléphone</small><strong>{{ livreur.telephone }}</strong></span></div>
+      <div><span class="readonly-icon"><i data-lucide="mail"></i></span><span><small>Adresse e-mail</small><strong>{{ livreur.user.email|default:"—" }}</strong></span></div>
+      <div class="readonly-wide"><span class="readonly-icon"><i data-lucide="map-pin"></i></span><span><small>Adresse</small><strong>{{ livreur.adresse }}</strong></span></div>
+      <div><span class="readonly-icon"><i data-lucide="badge-check"></i></span><span><small>Numéro de permis</small><strong>{{ livreur.numero_permis }}</strong></span></div>
+      <div><span class="readonly-icon"><i data-lucide="id-card"></i></span><span><small>Numéro CNI</small><strong>{{ livreur.numero_cni }}</strong></span></div>
+    </div>
+  </section>
+  <section class="profile-help"><i data-lucide="info"></i><span><strong>Une information est incorrecte ?</strong> Contactez le responsable BAOL EXPRESS pour demander une modification.</span></section>
+</section>
+{% endblock %}

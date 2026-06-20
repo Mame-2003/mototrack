@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Espace Livreur | MotoTrack{% endblock %}
+{% block page_title %}MOTOTRACK – Espace Livreur{% endblock %}
+{% block content %}
+<section class="driver-command-hero">
+  <div class="driver-command-main">
+    <div class="driver-identity">
+      {% if livreur.photo %}<img src="{{ livreur.photo.url }}" alt="{{ livreur.nom_complet }}">{% else %}<span class="driver-avatar">{{ livreur.nom_complet|first }}</span>{% endif %}
+      <div><span class="driver-status"><i></i> Livreur opérationnel</span><h2>Bonjour, {{ livreur.user.first_name|default:livreur.nom_complet }}</h2><p>Bienvenue dans votre espace de livraison BAOL EXPRESS.</p></div>
+    </div>
+    <div class="driver-command-actions"><a class="btn btn-light" href="{% url 'driver_missions' %}"><i data-lucide="route"></i> Voir mes missions</a>{% if priority_mission %}<a class="btn driver-primary-action" href="{% url 'driver_mission_detail' priority_mission.id %}">Mission prioritaire <i data-lucide="arrow-right"></i></a>{% endif %}</div>
+  </div>
+  <div class="driver-resource-strip">
+    <div><span class="resource-icon"><i data-lucide="bike"></i></span><span><small>Moto affectée</small><strong>{% if affectation %}{{ affectation.moto.immatriculation }}{% else %}Aucune moto{% endif %}</strong></span></div>
+    <div><span class="resource-icon"><i data-lucide="phone"></i></span><span><small>Contact</small><strong>{{ livreur.telephone }}</strong></span></div>
+    <div><span class="resource-icon"><i data-lucide="satellite"></i></span><span><small>Dernier signal</small><strong>{% if latest_position %}{{ latest_position.recue_le|timesince }}{% else %}Aucun signal{% endif %}</strong></span></div>
+  </div>
+</section>
+
+{% if priority_mission %}
+<section class="priority-mission">
+  <div class="priority-marker"><i data-lucide="navigation"></i></div>
+  <div class="priority-copy"><span class="eyebrow">Prochaine action</span><h2>Mission #{{ priority_mission.id }} · {{ priority_mission.nom_client }}</h2><p><i data-lucide="map-pin"></i>{{ priority_mission.adresse_livraison }}</p></div>
+  <span class="badge {{ priority_mission.statut }}">{{ priority_mission.get_statut_display }}</span>
+  <a class="btn btn-primary" href="{% url 'driver_mission_detail' priority_mission.id %}">Ouvrir <i data-lucide="arrow-up-right"></i></a>
+</section>
+{% endif %}
+
+<section class="stats-grid driver-stats">
+  <article class="stat-card driver-stat-card"><span class="stat-icon violet"><i data-lucide="clock-3"></i></span><div><small>En attente</small><strong>{{ missions_en_attente }}</strong><span>à prendre en charge</span></div></article>
+  <article class="stat-card driver-stat-card"><span class="stat-icon amber"><i data-lucide="route"></i></span><div><small>En cours</small><strong>{{ missions_en_cours }}</strong><span>livraisons actives</span></div></article>
+  <article class="stat-card driver-stat-card"><span class="stat-icon green"><i data-lucide="circle-check"></i></span><div><small>Terminées</small><strong>{{ missions_terminees }}</strong><span>preuves enregistrées</span></div></article>
+  <article class="stat-card driver-stat-card"><span class="stat-icon red"><i data-lucide="circle-x"></i></span><div><small>Annulées</small><strong>{{ missions_annulees }}</strong><span>missions arrêtées</span></div></article>
+</section>
+
+<section class="driver-dashboard-grid">
+  <div class="section-block">
+    <div class="section-heading"><div><span class="eyebrow">Planning</span><h2>Missions récentes</h2></div><a href="{% url 'driver_missions' %}">Tout afficher <i data-lucide="arrow-right"></i></a></div>
+    <div class="driver-mission-list">{% for mission in recent_missions %}<a href="{% url 'driver_mission_detail' mission.id %}"><span class="mission-ref">#{{ mission.id }}</span><span><strong>{{ mission.nom_client }}</strong><small>{{ mission.adresse_livraison }}</small></span><span class="badge {{ mission.statut }}">{{ mission.get_statut_display }}</span><i data-lucide="chevron-right"></i></a>{% empty %}<div class="empty-state"><i data-lucide="package-open"></i><p>Aucune mission assignée.</p></div>{% endfor %}</div>
+  </div>
+  <aside class="section-block driver-performance">
+    <div class="section-heading"><div><span class="eyebrow">Activité</span><h2>Livraisons effectuées</h2></div></div>
+    <div class="performance-value"><span>{{ total_livraisons }}</span><small>livraisons validées</small></div>
+    <div class="performance-line"><i data-lucide="shield-check"></i><span><strong>Validation sécurisée</strong><small>Chaque livraison terminée possède une preuve OTP.</small></span></div>
+    <a class="btn btn-secondary btn-wide" href="{% url 'driver_deliveries' %}">Consulter mon historique</a>
+  </aside>
+</section>
+{% endblock %}
