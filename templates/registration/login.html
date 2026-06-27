@@ -11,7 +11,7 @@
 <body class="login-body">
   <section class="login-visual">
     <div class="visual-grid"></div>
-    <div class="login-brand"><span class="brand-mark"><i data-lucide="navigation"></i></span> MotoTrack · Baol Express</div>
+    <div class="login-brand"><span class="brand-mark"><i data-lucide="navigation"></i></span> MotoTrack</div>
     <div class="login-copy">
       <span class="eyebrow light">Flotte connectée</span>
       <h1>Chaque livraison.<br>Suivie en temps réel.</h1>
@@ -22,7 +22,7 @@
   <main class="login-panel">
     <form method="post" class="login-form">
       {% csrf_token %}
-      <span class="mobile-brand"><span class="brand-mark"><i data-lucide="navigation"></i></span> MotoTrack · Baol Express</span>
+      <span class="mobile-brand"><span class="brand-mark"><i data-lucide="navigation"></i></span> MotoTrack</span>
       <div><span class="eyebrow">Accès sécurisé</span><h2>Bienvenue</h2><p>Connectez-vous à votre espace de travail.</p></div>
       {% if form.errors %}<div class="form-error">Identifiant ou mot de passe incorrect.</div>{% endif %}
       <label>Nom d’utilisateur<div class="input-icon"><i data-lucide="user"></i>{{ form.username }}</div></label>

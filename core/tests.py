@@ -328,7 +328,7 @@ class DriverSpaceTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/pdf")
         self.assertTrue(response.content.startswith(b"%PDF"))
-        self.assertIn(b"Signature numerique : MOTOTRACK - BAOL EXPRESS", response.content)
+        self.assertIn(b"Signature numerique : MOTOTRACK", response.content)
         self.assertIn(b"Reference de preuve", response.content)
 
     def test_driver_can_delete_only_own_alert(self):
@@ -357,7 +357,7 @@ class AccountManagementTests(TestCase):
             "username": "nouveau-responsable",
             "first_name": "Mame",
             "last_name": "Diop",
-            "email": "responsable@baolexpress.sn",
+            "email": "responsable@mototrack.sn",
             "password1": "CompteResponsable2026!",
             "password2": "CompteResponsable2026!",
         })

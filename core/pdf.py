@@ -10,7 +10,7 @@ def delivery_proof_pdf(proof):
     generated_at = timezone.localtime()
     reference = f"MT-{mission.id:06d}-{proof.id:06d}"
     lines = [
-        ("BAOL EXPRESS", 20),
+        ("MOTOTRACK", 20),
         ("MOTOTRACK", 15),
         ("Preuve officielle de livraison", 14),
         ("", 10),
@@ -24,7 +24,7 @@ def delivery_proof_pdf(proof):
         (f"Heure de livraison : {proof.valide_le:%H:%M:%S}", 11),
         ("", 10),
         ("Document certifie electroniquement", 11),
-        ("Signature numerique : MOTOTRACK - BAOL EXPRESS", 11),
+        ("Signature numerique : MOTOTRACK", 11),
         (f"Reference de preuve : {reference}", 10),
         (f"Document genere le : {generated_at:%d/%m/%Y a %H:%M:%S}", 10),
     ]

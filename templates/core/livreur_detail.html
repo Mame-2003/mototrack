@@ -5,7 +5,7 @@
 <section class="driver-record-hero">
   <div class="driver-record-identity">
     {% if livreur.photo %}<img src="{{ livreur.photo.url }}" alt="{{ livreur.nom_complet }}">{% else %}<span class="driver-record-avatar">{{ livreur.nom_complet|first }}</span>{% endif %}
-    <div><span class="eyebrow light">Livreur BAOL EXPRESS</span><h2>{{ livreur.nom_complet }}</h2><p>{{ livreur.user.email|default:"E-mail non renseigné" }} · {{ livreur.telephone }}</p></div>
+    <div><span class="eyebrow light">Livreur</span><h2>{{ livreur.nom_complet }}</h2><p>{{ livreur.user.email|default:"E-mail non renseigné" }} · {{ livreur.telephone }}</p></div>
   </div>
   <div class="driver-record-actions">
     <span class="badge {% if livreur.actif %}terminee{% else %}annulee{% endif %}">{% if livreur.actif %}Actif{% else %}Inactif{% endif %}</span>

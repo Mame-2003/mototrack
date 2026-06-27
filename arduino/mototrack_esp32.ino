@@ -4,6 +4,7 @@
  * Branchement : GPS TX -> ESP32 GPIO 16, GPS RX -> ESP32 GPIO 17.
  */
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <TinyGPSPlus.h>
@@ -12,7 +13,8 @@ const char* WIFI_SSID = "NOM_DU_WIFI";
 const char* WIFI_PASSWORD = "MOT_DE_PASSE_WIFI";
 
 // Test local : remplacer l'IP par celle du PC qui exécute Django.
-const char* API_URL = "http://192.168.1.158:8000/api/gps/positions/";
+// Adresse de production Render.
+const char* API_URL = "https://mototrack-nian.onrender.com/api/gps/positions/";
 // Production Render :
 // const char* API_URL = "https://mototrack.onrender.com/api/gps/positions/";
 
@@ -42,10 +44,12 @@ void sendPosition(double latitude, double longitude) {
   Serial.println("IP ESP32 : " + WiFi.localIP().toString());
   Serial.printf("Signal Wi-Fi : %d dBm\n", WiFi.RSSI());
 
-  WiFiClient client;
+  WiFiClientSecure client;
+  // Suffisant pour les tests academiques HTTPS.
+  client.setInsecure();
   HTTPClient http;
-  http.setConnectTimeout(10000);
-  http.setTimeout(10000);
+  http.setConnectTimeout(70000);
+  http.setTimeout(70000);
   if (!http.begin(client, API_URL)) {
     Serial.println("Erreur : impossible d'initialiser la connexion HTTP.");
     return;

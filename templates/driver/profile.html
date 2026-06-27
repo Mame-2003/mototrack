@@ -4,7 +4,7 @@
 <section class="driver-profile-view">
   <header class="driver-profile-banner">
     {% if livreur.photo %}<img src="{{ livreur.photo.url }}" alt="{{ livreur.nom_complet }}">{% else %}<span class="driver-profile-avatar">{{ livreur.nom_complet|first }}</span>{% endif %}
-    <div><span class="eyebrow light">Identité professionnelle</span><h2>{{ livreur.nom_complet }}</h2><p>Livreur BAOL EXPRESS · Compte vérifié</p></div>
+    <div><span class="eyebrow light">Identité professionnelle</span><h2>{{ livreur.nom_complet }}</h2><p>Livreur · Compte vérifié</p></div>
     <span class="profile-locked"><i data-lucide="lock-keyhole"></i> Profil géré par le responsable</span>
   </header>
   <section class="section-block profile-readonly">
@@ -19,6 +19,6 @@
       <div><span class="readonly-icon"><i data-lucide="id-card"></i></span><span><small>Numéro CNI</small><strong>{{ livreur.numero_cni }}</strong></span></div>
     </div>
   </section>
-  <section class="profile-help"><i data-lucide="info"></i><span><strong>Une information est incorrecte ?</strong> Contactez le responsable BAOL EXPRESS pour demander une modification.</span></section>
+  <section class="profile-help"><i data-lucide="info"></i><span><strong>Une information est incorrecte ?</strong> Contactez le responsable pour demander une modification.</span></section>
 </section>
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block page_title %}Centre d'alertes{% endblock %}
 {% block content %}
 <section class="alerts-summary">
-  <div><span class="alert-summary-icon"><i data-lucide="bell-ring"></i></span><div><span class="eyebrow">{% if user.is_staff %}Surveillance{% else %}Missions{% endif %}</span><h2>Alertes BAOL EXPRESS</h2><p>{% if user.is_staff %}Incidents GPS, sorties de zone et événements de livraison.{% else %}Nouvelles missions assignées et missions annulées.{% endif %}</p></div></div>
+  <div><span class="alert-summary-icon"><i data-lucide="bell-ring"></i></span><div><span class="eyebrow">{% if user.is_staff %}Surveillance{% else %}Missions{% endif %}</span><h2>Alertes MotoTrack</h2><p>{% if user.is_staff %}Incidents GPS, sorties de zone et événements de livraison.{% else %}Nouvelles missions assignées et missions annulées.{% endif %}</p></div></div>
   <span class="unread-total">{{ nav_unread_alerts }} non lue{{ nav_unread_alerts|pluralize }}</span>
 </section>
 <section class="section-block">

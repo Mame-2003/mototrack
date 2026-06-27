@@ -6,7 +6,7 @@
   <div class="driver-command-main">
     <div class="driver-identity">
       {% if livreur.photo %}<img src="{{ livreur.photo.url }}" alt="{{ livreur.nom_complet }}">{% else %}<span class="driver-avatar">{{ livreur.nom_complet|first }}</span>{% endif %}
-      <div><span class="driver-status"><i></i> Livreur opérationnel</span><h2>Bonjour, {{ livreur.user.first_name|default:livreur.nom_complet }}</h2><p>Bienvenue dans votre espace de livraison BAOL EXPRESS.</p></div>
+      <div><span class="driver-status"><i></i> Livreur opérationnel</span><h2>Bonjour, {{ livreur.user.first_name|default:livreur.nom_complet }}</h2><p>Bienvenue dans votre espace de livraison.</p></div>
     </div>
     <div class="driver-command-actions"><a class="btn btn-light" href="{% url 'driver_missions' %}"><i data-lucide="route"></i> Voir mes missions</a>{% if priority_mission %}<a class="btn driver-primary-action" href="{% url 'driver_mission_detail' priority_mission.id %}">Mission prioritaire <i data-lucide="arrow-right"></i></a>{% endif %}</div>
   </div>
