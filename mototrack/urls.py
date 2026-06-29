@@ -7,6 +7,7 @@ from django.urls import include, path
 from core import views
 
 urlpatterns = [
+    path("service-worker.js", views.service_worker, name="service_worker"),
     path("admin/", admin.site.urls),
     path("connexion/", LoginView.as_view(template_name="registration/login.html"), name="login"),
     path("inscription-responsable/", views.responsable_register, name="responsable_register"),

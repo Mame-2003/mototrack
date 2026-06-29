@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -24,6 +25,16 @@ from .forms import (
 from .models import Alert, Affectation, Livreur, Mission, Moto, PositionGPS, PreuveLivraison
 from .alerting import alerts_for_user
 from .pdf import delivery_proof_pdf
+
+
+def service_worker(request):
+    service_worker_path = settings.BASE_DIR / "static" / "service-worker.js"
+    response = HttpResponse(
+        service_worker_path.read_text(encoding="utf-8"),
+        content_type="application/javascript",
+    )
+    response["Service-Worker-Allowed"] = "/"
+    return response
 
 
 def manager_required(view):
