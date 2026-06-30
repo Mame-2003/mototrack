@@ -15,6 +15,9 @@
       </div>
     {% endif %}
     {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
-    <button class="btn btn-primary" type="submit"><i data-lucide="save"></i> Enregistrer</button>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit"><i data-lucide="save"></i> Enregistrer</button>
+      <a class="btn btn-secondary" href="{{ request.path }}"><i data-lucide="x"></i> Annuler</a>
+    </div>
   </form>
 </aside>
