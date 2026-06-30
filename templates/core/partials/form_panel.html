@@ -1,16 +1,29 @@
 <aside class="form-panel" id="form-panel">
   <div class="section-heading">
-    <div><span class="eyebrow">{% if editing %}Modification{% else %}Nouveau{% endif %}</span><h2>{{ heading }}</h2></div>
-    <a class="btn form-back-button" href="{{ request.path }}"><i data-lucide="arrow-left"></i> Retour à la liste</a>
+    <div>
+      <span class="eyebrow">{% if editing %}Modification{% else %}Nouveau{% endif %}</span>
+      <h2>{{ heading }}</h2>
+    </div>
+    <a class="btn form-back-button" href="{{ request.path }}">
+      <i data-lucide="x"></i> Annuler
+    </a>
   </div>
   <form method="post" enctype="multipart/form-data" class="data-form">
     {% csrf_token %}
     {% for field in form %}
-      <label>{{ field.label }}{{ field }}{% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}{% if field.errors %}<small class="field-error">{{ field.errors|join:", " }}</small>{% endif %}</label>
+      <label>
+        {{ field.label }}
+        {{ field }}
+        {% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}
+        {% if field.errors %}<small class="field-error">{{ field.errors|join:", " }}</small>{% endif %}
+      </label>
     {% endfor %}
     {% if request.resolver_match.url_name == "missions" %}
       <div class="destination-picker-wrap">
-        <div><strong>Choisir la destination sur la carte</strong><small>Cliquez dans la zone du Sénégal pour remplir automatiquement les coordonnées.</small></div>
+        <div>
+          <strong>Choisir la destination sur la carte</strong>
+          <small>Cliquez dans la zone du Senegal pour remplir automatiquement les coordonnees.</small>
+        </div>
         <div id="destinationPickerMap"></div>
       </div>
     {% endif %}
