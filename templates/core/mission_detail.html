@@ -11,7 +11,12 @@
       <div><i data-lucide="message-square-text"></i><span><small>Indications</small><strong>{{ mission.description_lieu|default:"Aucune indication" }}</strong></span></div>
       <div><i data-lucide="bike"></i><span><small>Moto</small><strong>{{ mission.moto.immatriculation }}</strong></span></div>
     </div>
-    <a class="btn btn-secondary" href="tel:{{ mission.telephone_client }}"><i data-lucide="phone-call"></i> Appeler le client</a>
+    <div class="mission-actions">
+      <a class="btn btn-secondary" href="tel:{{ mission.telephone_client }}"><i data-lucide="phone-call"></i> Appeler le client</a>
+      {% if mission.statut != "terminee" and mission.statut != "annulee" %}
+        <a class="btn btn-secondary" href="sms:{{ mission.telephone_client }}?&body=Bonjour%2C%20votre%20code%20OTP%20MotoTrack%20est%20{{ mission.otp }}%20pour%20la%20mission%20%23{{ mission.id }}.%20Merci."><i data-lucide="message-circle"></i> Envoyer l'OTP par SMS</a>
+      {% endif %}
+    </div>
   </div>
   <aside class="otp-panel">
     <span class="otp-icon"><i data-lucide="shield-check"></i></span><span class="eyebrow">Preuve sécurisée</span><h2>Valider la livraison</h2>
