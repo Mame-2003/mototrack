@@ -1,3 +1,4 @@
+import re
 import secrets
 from datetime import timedelta
 
@@ -134,6 +135,13 @@ class Mission(models.Model):
 
     class Meta:
         ordering = ["-cree_le"]
+
+    @property
+    def whatsapp_number(self):
+        number = re.sub(r"\D", "", self.telephone_client)
+        if len(number) == 9:
+            return f"221{number}"
+        return number
 
     def clean(self):
         if self.livreur_id and self.moto_id and not Affectation.objects.filter(

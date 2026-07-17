@@ -47,6 +47,20 @@ class MotoTrackTests(TestCase):
             type=Alert.Type.VALIDATION_COMMANDE,
         ).exists())
 
+    def test_manager_can_send_otp_by_whatsapp(self):
+        manager = User.objects.create_user("manager-whatsapp", password="secret", is_staff=True)
+        mission = Mission.objects.create(
+            nom_client="Client WhatsApp", telephone_client="76 000 00 00",
+            adresse_livraison="Plateau", livreur=self.livreur, moto=self.moto,
+        )
+        self.client.force_login(manager)
+
+        response = self.client.get(reverse("mission_detail", args=[mission.id]))
+
+        self.assertContains(response, "Envoyer l'OTP par WhatsApp")
+        self.assertContains(response, f"https://wa.me/221760000000?text=")
+        self.assertNotContains(response, "sms:")
+
     def test_mission_cannot_be_manually_marked_completed(self):
         mission = Mission(
             nom_client="Client Test", telephone_client="760000000",
