@@ -19,7 +19,16 @@
           <td>{% if alert.mission %}<a href="{% url 'mission_detail' alert.mission.id %}">#{{ alert.mission.id }}</a>{% else %}—{% endif %}</td>
           <td><span class="alert-type-badge {{ alert.type|lower }}">{{ alert.get_type_display }}</span></td>
           <td class="alert-message">{{ alert.message }}</td>
-          <td><span class="badge {% if alert.is_read %}disponible{% else %}annulee{% endif %}">{% if alert.is_read %}Lue{% else %}Non lue{% endif %}</span></td>
+          <td>
+            {% if alert.is_read %}
+              <span class="badge disponible">Lue</span>
+            {% else %}
+              <form method="post" action="{% url 'alert_mark_read' alert.id %}" class="status-form">
+                {% csrf_token %}
+                <button type="submit" class="badge annulee status-badge-button" title="Marquer cette alerte comme lue">Non lue</button>
+              </form>
+            {% endif %}
+          </td>
           <td class="actions">
             {% if not alert.is_read %}<form method="post" action="{% url 'alert_mark_read' alert.id %}">{% csrf_token %}<button class="icon-btn" title="Marquer comme lue"><i data-lucide="check"></i></button></form>{% else %}<i data-lucide="check-check" class="read-check"></i>{% endif %}
             <form method="post" action="{% url 'alert_delete' alert.id %}" onsubmit="return confirm('Supprimer cette alerte ?')">{% csrf_token %}<button class="icon-btn danger" title="Supprimer l'alerte"><i data-lucide="trash-2"></i></button></form>
