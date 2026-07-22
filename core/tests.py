@@ -366,6 +366,41 @@ class DriverSpaceTests(TestCase):
 
 
 class AccountManagementTests(TestCase):
+    def test_root_entry_logs_out_existing_session(self):
+        manager = User.objects.create_user("responsable-entry", password="secret", is_staff=True)
+        self.client.force_login(manager)
+
+        response = self.client.get(reverse("entry"))
+
+        self.assertRedirects(response, reverse("login"))
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_manager_can_deactivate_and_reactivate_driver_account(self):
+        manager = User.objects.create_user("responsable-toggle", password="secret", is_staff=True)
+        driver_user = User.objects.create_user("livreur-toggle", password="secret")
+        driver = Livreur.objects.create(
+            user=driver_user,
+            telephone="770000088",
+            adresse="Dakar",
+            numero_permis="PERMIS-TOGGLE",
+            numero_cni="CNI-TOGGLE",
+        )
+        self.client.force_login(manager)
+
+        response = self.client.post(reverse("livreurs"), {"toggle_active": driver.id})
+        self.assertRedirects(response, reverse("livreurs"))
+        driver.refresh_from_db()
+        driver_user.refresh_from_db()
+        self.assertFalse(driver.actif)
+        self.assertFalse(driver_user.is_active)
+
+        response = self.client.post(reverse("livreurs"), {"toggle_active": driver.id})
+        self.assertRedirects(response, reverse("livreurs"))
+        driver.refresh_from_db()
+        driver_user.refresh_from_db()
+        self.assertTrue(driver.actif)
+        self.assertTrue(driver_user.is_active)
+
     def test_responsable_can_create_account(self):
         response = self.client.post(reverse("responsable_register"), {
             "username": "nouveau-responsable",

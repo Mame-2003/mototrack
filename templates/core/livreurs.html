@@ -28,6 +28,12 @@
             <td class="actions">
               <a class="icon-btn view-action" href="{% url 'livreur_detail' livreur.id %}" title="Voir la fiche complete"><i data-lucide="eye"></i></a>
               <a class="icon-btn" href="?modifier={{ livreur.id }}" title="Modifier"><i data-lucide="pencil"></i></a>
+              <form method="post" onsubmit="return confirm('{% if livreur.actif %}Désactiver{% else %}Activer{% endif %} le compte de {{ livreur.nom_complet|escapejs }} ?');">
+                {% csrf_token %}
+                <button class="icon-btn {% if livreur.actif %}danger{% else %}activate-action{% endif %}" name="toggle_active" value="{{ livreur.id }}" title="{% if livreur.actif %}Désactiver{% else %}Activer{% endif %}">
+                  <i data-lucide="{% if livreur.actif %}user-x{% else %}user-check{% endif %}"></i>
+                </button>
+              </form>
               <form method="post">{% csrf_token %}<button class="icon-btn danger" name="delete" value="{{ livreur.id }}" title="Supprimer"><i data-lucide="trash-2"></i></button></form>
             </td>
           </tr>
