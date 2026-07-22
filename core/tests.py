@@ -366,6 +366,32 @@ class DriverSpaceTests(TestCase):
 
 
 class AccountManagementTests(TestCase):
+    def test_direct_link_to_any_interface_requires_fresh_login(self):
+        manager = User.objects.create_user("responsable-direct-link", password="secret", is_staff=True)
+        self.client.force_login(manager)
+
+        response = self.client.get(
+            reverse("livreurs"),
+            HTTP_SEC_FETCH_SITE="none",
+            HTTP_SEC_FETCH_MODE="navigate",
+        )
+
+        self.assertRedirects(response, reverse("login"))
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_internal_navigation_keeps_authenticated_session(self):
+        manager = User.objects.create_user("responsable-internal-link", password="secret", is_staff=True)
+        self.client.force_login(manager)
+
+        response = self.client.get(
+            reverse("livreurs"),
+            HTTP_SEC_FETCH_SITE="same-origin",
+            HTTP_SEC_FETCH_MODE="navigate",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("_auth_user_id", self.client.session)
+
     def test_root_entry_logs_out_existing_session(self):
         manager = User.objects.create_user("responsable-entry", password="secret", is_staff=True)
         self.client.force_login(manager)
