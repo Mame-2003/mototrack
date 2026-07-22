@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -35,6 +35,13 @@ def service_worker(request):
     )
     response["Service-Worker-Allowed"] = "/"
     return response
+
+
+def entry_page(request):
+    """Start every visit from the public entry point with a fresh login."""
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect("login")
 
 
 def manager_required(view):
@@ -112,6 +119,15 @@ def motos_page(request):
 @manager_required
 def livreurs_page(request):
     edit_id = request.GET.get("modifier")
+    if request.method == "POST" and request.POST.get("toggle_active"):
+        livreur = get_object_or_404(Livreur.objects.select_related("user"), pk=request.POST["toggle_active"])
+        livreur.actif = not livreur.actif
+        livreur.user.is_active = livreur.actif
+        livreur.save(update_fields=["actif"])
+        livreur.user.save(update_fields=["is_active"])
+        etat = "activé" if livreur.actif else "désactivé"
+        messages.success(request, f"Le compte de {livreur.nom_complet} a été {etat}.")
+        return redirect("livreurs")
     if request.method == "POST" and request.POST.get("delete"):
         try:
             get_object_or_404(Livreur, pk=request.POST["delete"]).delete()
