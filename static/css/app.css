@@ -39,6 +39,29 @@
 .contract-date-hidden{display:none!important}.contract-badge{display:inline-flex;padding:5px 9px;border-radius:12px;font-size:10px;font-weight:800}.contract-badge.cdi{background:#e2f2e8;color:#087443}.contract-badge.cdd{background:#fff0c2;color:#8a6200}
 .status-form{display:inline;margin:0}.status-badge-button{border:0;font-family:inherit;cursor:pointer}.status-badge-button:hover,.status-badge-button:focus-visible{filter:brightness(.95);box-shadow:0 0 0 3px rgba(169,67,53,.14);outline:none}
 .icon-btn.activate-action{color:var(--green)}
+
+/* Thème MotoTrack — bleu + orange */
+:root{--ink:#17243d;--muted:#68758a;--line:#dfe6f0;--surface:#fff;--bg:#f4f7fb;--nav:#102a4c;--nav2:#173d6e;--blue:#1769d2;--cyan:#f39a1f;--green:#19875f;--amber:#f39a1f;--red:#d94a45;--shadow:0 10px 30px rgba(16,42,76,.1)}
+body{background:linear-gradient(180deg,#f8faff 0,#f2f6fb 100%);color:var(--ink)}
+.sidebar{background:#102a4c;border-right-color:#1c477c;box-shadow:8px 0 28px rgba(16,42,76,.16)}
+.brand-mark{background:#f39a1f;color:#fff}.brand small,.sidebar-footer small{color:#a9bdd8}.sidebar-footer{border-top-color:#284d79}
+.nav-list a{color:#c2d0e2}.nav-list a:hover{background:#173d6e}.nav-list a.active{background:#1c4d88;box-shadow:inset 3px 0 #f39a1f}
+.btn-primary{background:#1769d2}.btn-primary:hover{background:#1157b2}.btn-secondary{background:#e7eef8;color:#173d6e}
+.welcome-band,.driver-hero,.profile-header,.alerts-summary,.driver-bike-hero,.driver-profile-banner,.driver-record-hero{background:linear-gradient(120deg,#102a4c 0%,#1769d2 72%,#f39a1f 145%);box-shadow:0 14px 30px rgba(16,42,76,.2);border-left-color:#f39a1f}
+.welcome-band:before,.driver-hero:before,.driver-record-hero:before{background:linear-gradient(135deg,transparent,rgba(243,154,31,.2))}
+.welcome-band h2,.welcome-band h2 strong,.welcome-details svg,.welcome-signature span{color:#ffbd5c}.welcome-logo{color:#1769d2}.welcome-signature{background:rgba(9,34,67,.26)}
+.driver-command-hero{background:linear-gradient(118deg,#102a4c 0%,#1769d2 78%,#f39a1f 150%);border-top-color:#f39a1f;box-shadow:0 16px 32px rgba(16,42,76,.2)}
+.driver-primary-action{background:#f39a1f;color:#17243d}.driver-status i{background:#ffbd5c}.resource-icon{color:#ffbd5c}
+.login-visual{background:linear-gradient(135deg,#102a4c 0%,#1769d2 74%,#f39a1f 145%);border-right-color:#f39a1f}
+.form-control:focus,.login-form input:focus{border-color:#1769d2;box-shadow:0 0 0 3px #e2edfb}
+.alert-bell{color:#1769d2;border-color:#dce5f1}.alert-bell:hover{background:#eaf1fb}.alert-bell>span,.nav-alert-count,.alert-live-count{background:#f39a1f}
+.alerts-summary .alert-summary-icon{color:#1769d2}.unread-total{background:rgba(243,154,31,.2)}
+.priority-mission{border-left-color:#f39a1f}.priority-marker{background:#fff0d8;color:#9b5d00}
+.proof-document header{background:#102a4c;border-bottom-color:#f39a1f}.otp-icon{background:#e5eefb;color:#1769d2}
+.moto-pin.fresh{background:#1769d2}.moto-pin.stale{background:#f39a1f}.moto-tooltip{background:#102a4c!important}.moto-tooltip:before{border-top-color:#102a4c!important}
+.map-legend,.leaflet-control-layers{border-top-color:#f39a1f!important}.google-map-key-note{background:rgba(16,42,76,.95);border-left-color:#f39a1f}.fallback-moto-label{background:#102a4c}.fallback-moto-icon,.fallback-moto-icon:after{background:#1769d2}
+.mission-route-legend{color:#102a4c;border-left-color:#f39a1f}.legend-moto{background:#1769d2;box-shadow:0 0 0 1px #1769d2}.legend-destination{background:#f39a1f}.history-toggle input{accent-color:#1769d2}
+.section-heading .form-back-button{background:#102a4c;border-color:#102a4c;box-shadow:0 4px 12px rgba(16,42,76,.16)}.section-heading .form-back-button:hover{background:#173d6e}
 .driver-record-hero{color:#fff;padding:25px 28px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:20px}.driver-record-identity{display:flex;align-items:center;gap:16px}.driver-record-identity img,.driver-record-avatar{width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.82)}.driver-record-avatar{display:grid;place-items:center;background:#fff;color:#087443;font:800 29px Manrope}.driver-record-identity h2{font:800 25px Manrope;margin:4px 0}.driver-record-identity p{margin:0;color:#d8e8dd;font-size:12px}.driver-record-actions{display:flex;align-items:center;gap:10px}.record-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.record-list{margin:0;padding:0 22px 20px}.record-list div{display:flex;justify-content:space-between;align-items:start;gap:20px;padding:12px 0;border-top:1px solid var(--line)}.record-list dt{color:var(--muted);font-size:11px}.record-list dd{margin:0;text-align:right;font-size:12px;font-weight:700}.record-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 22px 17px}.record-stats div{padding:16px;background:#f3f7f1;border-left:3px solid #d7a315;border-radius:6px}.record-stats strong,.record-stats span{display:block}.record-stats strong{font:800 24px Manrope;color:#087443}.record-stats span{font-size:10px;color:var(--muted)}.contract-download{margin:0 22px 22px}.contract-empty{margin:0 22px 22px;padding:13px;display:flex;align-items:center;gap:8px;background:#f5f7f2;color:var(--muted);border-radius:6px;font-size:11px}
 @media(max-width:760px){.record-grid{grid-template-columns:1fr}.driver-record-hero{align-items:flex-start;flex-direction:column}.driver-record-actions{width:100%;justify-content:space-between}.driver-record-identity img,.driver-record-avatar{width:60px;height:60px}.driver-record-identity h2{font-size:20px}}
 
@@ -225,3 +248,20 @@ body{background:#fbf7f3;color:var(--ink)}
 .muted-text{color:var(--muted);font-size:11px;font-weight:700}
 .auth-switch-link{display:flex;align-items:center;justify-content:center;gap:7px;color:#765866;font-size:12px;font-weight:800}.auth-switch-link svg{width:16px}.registration-form{gap:14px}.registration-form .help-text{display:block;margin-top:5px;color:var(--muted);font-size:9px;line-height:1.4}
 .section-heading .form-back-button{background:#501f35;color:#fff;border:1px solid #501f35;padding:10px 14px;font-size:12px;font-weight:800;box-shadow:0 4px 12px rgba(80,31,53,.16)}.section-heading .form-back-button:hover{background:#6d2945;color:#fff}.form-back-button svg{width:16px;height:16px}
+
+/* Palette finale prioritaire : bleu + orange */
+:root{--ink:#17243d;--muted:#68758a;--line:#dfe6f0;--surface:#fff;--bg:#f4f7fb;--nav:#102a4c;--nav2:#173d6e;--blue:#1769d2;--cyan:#f39a1f;--green:#19875f;--amber:#f39a1f;--red:#d94a45;--shadow:0 10px 30px rgba(16,42,76,.1)}
+body{background:linear-gradient(180deg,#f8faff 0,#f2f6fb 100%);color:var(--ink)}
+.sidebar{background:#102a4c;border-right-color:#1c477c;box-shadow:8px 0 28px rgba(16,42,76,.16)}
+.brand-mark{background:#f39a1f;color:#fff}.brand small,.sidebar-footer small{color:#a9bdd8}.sidebar-footer{border-top-color:#284d79}
+.nav-list a{color:#c2d0e2}.nav-list a:hover{background:#173d6e}.nav-list a.active{background:#1c4d88;box-shadow:inset 3px 0 #f39a1f}
+.btn-primary{background:#1769d2}.btn-primary:hover{background:#1157b2}.btn-secondary{background:#e7eef8;color:#173d6e}
+.welcome-band,.driver-hero,.profile-header,.alerts-summary,.driver-bike-hero,.driver-profile-banner,.driver-record-hero{background:linear-gradient(120deg,#102a4c 0%,#1769d2 72%,#f39a1f 145%);box-shadow:0 14px 30px rgba(16,42,76,.2);border-left-color:#f39a1f}
+.welcome-band:before,.driver-hero:before,.driver-record-hero:before{background:linear-gradient(135deg,transparent,rgba(243,154,31,.2))}.welcome-band h2,.welcome-band h2 strong,.welcome-details svg,.welcome-signature span{color:#ffbd5c}.welcome-logo{color:#1769d2}.welcome-signature{background:rgba(9,34,67,.26)}
+.driver-command-hero{background:linear-gradient(118deg,#102a4c 0%,#1769d2 78%,#f39a1f 150%);border-top-color:#f39a1f;box-shadow:0 16px 32px rgba(16,42,76,.2)}.driver-primary-action{background:#f39a1f;color:#17243d}.driver-status i{background:#ffbd5c}.resource-icon{color:#ffbd5c}
+.login-visual{background:linear-gradient(135deg,#102a4c 0%,#1769d2 74%,#f39a1f 145%);border-right-color:#f39a1f}.form-control:focus,.login-form input:focus{border-color:#1769d2;box-shadow:0 0 0 3px #e2edfb}
+.alert-bell{color:#1769d2;border-color:#dce5f1}.alert-bell:hover{background:#eaf1fb}.alert-bell>span,.nav-alert-count,.alert-live-count{background:#f39a1f}.alerts-summary .alert-summary-icon{color:#1769d2}.unread-total{background:rgba(243,154,31,.2)}
+.priority-mission{border-left-color:#f39a1f}.priority-marker{background:#fff0d8;color:#9b5d00}.proof-document header{background:#102a4c;border-bottom-color:#f39a1f}.otp-icon{background:#e5eefb;color:#1769d2}
+.moto-pin.fresh{background:#1769d2}.moto-pin.stale{background:#f39a1f}.moto-tooltip{background:#102a4c!important}.moto-tooltip:before{border-top-color:#102a4c!important}.map-legend,.leaflet-control-layers{border-top-color:#f39a1f!important}
+.google-map-key-note{background:rgba(16,42,76,.95);border-left-color:#f39a1f}.fallback-moto-label{background:#102a4c}.fallback-moto-icon,.fallback-moto-icon:after{background:#1769d2}.mission-route-legend{color:#102a4c;border-left-color:#f39a1f}.legend-moto{background:#1769d2;box-shadow:0 0 0 1px #1769d2}.legend-destination{background:#f39a1f}.history-toggle input{accent-color:#1769d2}
+.section-heading .form-back-button{background:#102a4c;border-color:#102a4c;box-shadow:0 4px 12px rgba(16,42,76,.16)}.section-heading .form-back-button:hover{background:#173d6e}
